@@ -52,52 +52,53 @@ function App() {
 
   const tiles = [
     {
-      id: 'dashboard',
-      title: 'Dashboard',
-      icon: '📊',
-      description: 'View your overview and metrics',
-      color: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600'
+      id: 'leave',
+      title: 'Leave Management',
+      icon: (
+        <svg className="w-16 h-16 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+        </svg>
+      ),
+      bgColor: 'bg-blue-50',
+      borderColor: 'border-blue-200',
+      hoverColor: 'hover:bg-blue-100'
     },
     {
       id: 'policies',
-      title: 'HR Policies',
-      icon: '📚',
-      description: 'Access company policies and documents',
-      color: 'bg-green-500',
-      hoverColor: 'hover:bg-green-600'
-    },
-    {
-      id: 'leave',
-      title: 'Leave Management',
-      icon: '📝',
-      description: 'Apply for leave and track balance',
-      color: 'bg-purple-500',
-      hoverColor: 'hover:bg-purple-600'
+      title: 'HR Policy',
+      icon: (
+        <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/>
+          <path d="M17.5 10.5c.88 0 1.73.09 2.5.26V9.24c-.79-.15-1.64-.24-2.5-.24-1.7 0-3.24.29-4.5.83v1.66c1.13-.64 2.7-.99 4.5-.99zM13 12.49v1.66c1.13-.64 2.7-.99 4.5-.99.88 0 1.73.09 2.5.26V11.9c-.79-.15-1.64-.24-2.5-.24-1.7 0-3.24.29-4.5.83zM17.5 14.33c-1.7 0-3.24.29-4.5.83v1.66c1.13-.64 2.7-.99 4.5-.99.88 0 1.73.09 2.5.26v-1.52c-.79-.15-1.64-.24-2.5-.24z"/>
+        </svg>
+      ),
+      bgColor: 'bg-teal-500',
+      borderColor: 'border-teal-500',
+      hoverColor: 'hover:bg-teal-600'
     },
     {
       id: 'payroll',
       title: 'Payroll',
-      icon: '💰',
-      description: 'View salary and download payslips',
-      color: 'bg-yellow-500',
-      hoverColor: 'hover:bg-yellow-600'
+      icon: (
+        <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+        </svg>
+      ),
+      bgColor: 'bg-green-500',
+      borderColor: 'border-green-500',
+      hoverColor: 'hover:bg-green-600'
     },
     {
       id: 'profile',
-      title: 'Profile',
-      icon: '👤',
-      description: 'Manage your personal information',
-      color: 'bg-indigo-500',
-      hoverColor: 'hover:bg-indigo-600'
-    },
-    {
-      id: 'reports',
-      title: 'Reports',
-      icon: '📈',
-      description: 'Generate and view reports',
-      color: 'bg-red-500',
-      hoverColor: 'hover:bg-red-600'
+      title: 'Update Profile',
+      icon: (
+        <svg className="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      ),
+      bgColor: 'bg-orange-400',
+      borderColor: 'border-orange-400',
+      hoverColor: 'hover:bg-orange-500'
     }
   ];
 
@@ -131,22 +132,51 @@ function App() {
   };
 
   const renderMainDashboard = () => (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-lg border-b-4 border-blue-500">
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
+          <div className="flex justify-between items-center py-4">
+            {/* Left side - Title */}
             <div className="flex items-center">
-              <h1 className="text-3xl font-bold text-gray-900">🏢 HR Manual App</h1>
-              <span className="ml-4 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">v1.0</span>
+              <h1 className="text-2xl font-semibold text-gray-900">HR Dashboard</h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Welcome back,</p>
-                <p className="font-semibold text-gray-900">{user.name}</p>
+
+            {/* Center - Search Bar */}
+            <div className="flex-1 max-w-md mx-8">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Search"
+                />
               </div>
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">
-                {user.name.charAt(0)}
+            </div>
+
+            {/* Right side - Notifications and Profile */}
+            <div className="flex items-center space-x-4">
+              {/* Notification Icon */}
+              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-3.5-3.5V9a6.502 6.502 0 00-13 0v4.5L1 17h5m4 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              </button>
+
+              {/* Profile Dropdown */}
+              <div className="flex items-center space-x-2">
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+                  alt="Profile"
+                />
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </div>
             </div>
           </div>
@@ -154,91 +184,27 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Welcome to Your HR Dashboard
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Manage your HR activities efficiently with our comprehensive management system. 
-            Click on any tile below to access the respective module.
-          </p>
-        </div>
-
-        {/* Tiles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Tiles Grid - 2x2 Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {tiles.map((tile) => (
             <div
               key={tile.id}
               onClick={() => setCurrentView(tile.id)}
-              className={`${tile.color} ${tile.hoverColor} rounded-2xl p-8 text-white cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl group`}
+              className={`${tile.bgColor} ${tile.borderColor} ${tile.hoverColor} rounded-2xl border-2 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-lg group overflow-hidden`}
+              style={{ height: '280px' }}
             >
-              <div className="text-center">
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {tile.icon}
-                </div>
-                <h3 className="text-2xl font-bold mb-3">{tile.title}</h3>
-                <p className="text-white/90 mb-6">{tile.description}</p>
-                <div className="inline-flex items-center text-white/80 group-hover:text-white transition-colors">
-                  <span className="text-sm font-medium">Open Module</span>
-                  <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
+              {/* Icon Section */}
+              <div className="flex items-center justify-center h-2/3 pt-8">
+                {tile.icon}
+              </div>
+              
+              {/* Title Section */}
+              <div className="bg-white h-1/3 flex items-center justify-center">
+                <h3 className="text-xl font-semibold text-gray-900">{tile.title}</h3>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Quick Stats */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <span className="text-2xl">📅</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm text-gray-600">Leave Balance</p>
-                <p className="text-2xl font-bold text-gray-900">18 Days</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-3 bg-green-100 rounded-lg">
-                <span className="text-2xl">✅</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm text-gray-600">Completed Tasks</p>
-                <p className="text-2xl font-bold text-gray-900">12</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-3 bg-yellow-100 rounded-lg">
-                <span className="text-2xl">💰</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm text-gray-600">This Month Salary</p>
-                <p className="text-2xl font-bold text-gray-900">₹45,000</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <span className="text-2xl">📊</span>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm text-gray-600">Performance</p>
-                <p className="text-2xl font-bold text-gray-900">95%</p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>
@@ -263,7 +229,6 @@ function App() {
                   </svg>
                 </button>
                 <div className="flex items-center">
-                  <span className="text-3xl mr-3">{currentTile?.icon}</span>
                   <h1 className="text-2xl font-bold text-gray-900">{currentTile?.title}</h1>
                 </div>
               </div>
@@ -847,4 +812,4 @@ function QuickActions({ openModal }) {
   );
 }
 
-export default App;
+export default App; 
