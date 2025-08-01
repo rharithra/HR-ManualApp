@@ -9,9 +9,46 @@ const mockUser = {
   email: "john.doe@company.com"
 };
 
+// Mock policies data
+const mockPolicies = [
+  {
+    id: 1,
+    title: "Company Introduction",
+    category: "General",
+    updated: "2024-01-15",
+    status: "Active",
+    content: "Welcome to our company! We are committed to excellence and innovation. Our mission is to provide outstanding HR services and create a positive work environment for all employees."
+  },
+  {
+    id: 2,
+    title: "Code of Conduct",
+    category: "Ethics",
+    updated: "2024-01-10",
+    status: "Active",
+    content: "All employees must maintain high ethical standards. This includes honesty, integrity, respect for colleagues, and adherence to company policies and procedures."
+  },
+  {
+    id: 3,
+    title: "Leave Policy",
+    category: "Leave",
+    updated: "2024-01-08",
+    status: "Active",
+    content: "Employees are entitled to: Casual Leave (12 days), Sick Leave (12 days), Earned Leave (21 days). All leave requests must be submitted in advance and approved by your manager."
+  }
+];
+
 function App() {
   const [currentView, setCurrentView] = useState('main');
   const [user, setUser] = useState(mockUser);
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [selectedPolicy, setSelectedPolicy] = useState(null);
+  const [leaveForm, setLeaveForm] = useState({
+    leaveType: '',
+    startDate: '',
+    endDate: '',
+    reason: ''
+  });
 
   const tiles = [
     {
@@ -63,6 +100,35 @@ function App() {
       hoverColor: 'hover:bg-red-600'
     }
   ];
+
+  // Modal functions
+  const openModal = (type, data = null) => {
+    setModalType(type);
+    setSelectedPolicy(data);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setModalType('');
+    setSelectedPolicy(null);
+    setLeaveForm({ leaveType: '', startDate: '', endDate: '', reason: '' });
+  };
+
+  const handleLeaveSubmit = (e) => {
+    e.preventDefault();
+    alert(`Leave application submitted successfully! 
+    Leave Type: ${leaveForm.leaveType}
+    Start Date: ${leaveForm.startDate}
+    End Date: ${leaveForm.endDate}
+    Reason: ${leaveForm.reason}`);
+    closeModal();
+  };
+
+  const downloadPayslip = (month) => {
+    alert(`Downloading payslip for ${month}... 
+    This would normally trigger a PDF download.`);
+  };
 
   const renderMainDashboard = () => (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -213,22 +279,226 @@ function App() {
 
         {/* Module Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {currentView === 'dashboard' && <DashboardModule user={user} />}
-          {currentView === 'policies' && <HRPoliciesModule />}
-          {currentView === 'leave' && <LeaveManagementModule user={user} />}
-          {currentView === 'payroll' && <PayrollModule user={user} />}
-          {currentView === 'profile' && <ProfileModule user={user} />}
-          {currentView === 'reports' && <ReportsModule />}
+          {currentView === 'dashboard' && <DashboardModule user={user} openModal={openModal} />}
+          {currentView === 'policies' && <HRPoliciesModule openModal={openModal} />}
+          {currentView === 'leave' && <LeaveManagementModule user={user} openModal={openModal} />}
+          {currentView === 'payroll' && <PayrollModule user={user} downloadPayslip={downloadPayslip} />}
+          {currentView === 'profile' && <ProfileModule user={user} openModal={openModal} />}
+          {currentView === 'reports' && <ReportsModule openModal={openModal} />}
         </main>
       </div>
     );
   };
 
-  return currentView === 'main' ? renderMainDashboard() : renderModuleDashboard();
+  const renderModal = () => {
+    if (!showModal) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-xl max-w-2xl w-full max-h-96 overflow-y-auto">
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900">
+                {modalType === 'apply-leave' && '📝 Apply for Leave'}
+                {modalType === 'view-policy' && `📚 ${selectedPolicy?.title}`}
+                {modalType === 'edit-profile' && '👤 Edit Profile'}
+                {modalType === 'view-calendar' && '📅 Holiday Calendar'}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-gray-600 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Apply Leave Form */}
+            {modalType === 'apply-leave' && (
+              <form onSubmit={handleLeaveSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Leave Type</label>
+                  <select
+                    value={leaveForm.leaveType}
+                    onChange={(e) => setLeaveForm({...leaveForm, leaveType: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select Leave Type</option>
+                    <option value="casual">Casual Leave</option>
+                    <option value="sick">Sick Leave</option>
+                    <option value="earned">Earned Leave</option>
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                    <input
+                      type="date"
+                      value={leaveForm.startDate}
+                      onChange={(e) => setLeaveForm({...leaveForm, startDate: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                    <input
+                      type="date"
+                      value={leaveForm.endDate}
+                      onChange={(e) => setLeaveForm({...leaveForm, endDate: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Reason</label>
+                  <textarea
+                    value={leaveForm.reason}
+                    onChange={(e) => setLeaveForm({...leaveForm, reason: e.target.value})}
+                    rows="3"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter reason for leave..."
+                    required
+                  ></textarea>
+                </div>
+                <div className="flex space-x-3">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    Submit Leave Request
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* View Policy Content */}
+            {modalType === 'view-policy' && selectedPolicy && (
+              <div>
+                <div className="mb-4">
+                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                    {selectedPolicy.status}
+                  </span>
+                  <span className="ml-2 text-sm text-gray-600">
+                    Category: {selectedPolicy.category}
+                  </span>
+                  <span className="ml-2 text-sm text-gray-600">
+                    Updated: {selectedPolicy.updated}
+                  </span>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-700 leading-relaxed">
+                    {selectedPolicy.content}
+                  </p>
+                </div>
+                <div className="mt-4 flex space-x-3">
+                  <button
+                    onClick={() => alert('Downloading policy document...')}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    📄 Download PDF
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Holiday Calendar */}
+            {modalType === 'view-calendar' && (
+              <div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span>🎄 Christmas Day</span>
+                    <span>December 25, 2024</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span>🎊 New Year's Day</span>
+                    <span>January 1, 2025</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                    <span>🇮🇳 Republic Day</span>
+                    <span>January 26, 2025</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                    <span>🕉️ Holi</span>
+                    <span>March 14, 2025</span>
+                  </div>
+                </div>
+                <button
+                  onClick={closeModal}
+                  className="mt-4 w-full bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            )}
+
+            {/* Edit Profile */}
+            {modalType === 'edit-profile' && (
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                    <input type="text" defaultValue="John" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                    <input type="text" defaultValue="Doe" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input type="tel" defaultValue="+91 9876543210" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                    <input type="text" defaultValue="123 Main St, City" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+                <div className="mt-6 flex space-x-3">
+                  <button
+                    onClick={() => {alert('Profile updated successfully!'); closeModal();}}
+                    className="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    Save Changes
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      {currentView === 'main' ? renderMainDashboard() : renderModuleDashboard()}
+      {renderModal()}
+    </div>
+  );
 }
 
 // Dashboard Module Component
-function DashboardModule({ user }) {
+function DashboardModule({ user, openModal }) {
   return (
     <div className="space-y-8">
       <div className="bg-white rounded-xl p-6 shadow-lg">
@@ -243,7 +513,7 @@ function DashboardModule({ user }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <RecentActivity />
-          <QuickActions />
+          <QuickActions openModal={openModal} />
         </div>
       </div>
     </div>
@@ -251,36 +521,33 @@ function DashboardModule({ user }) {
 }
 
 // HR Policies Module Component
-function HRPoliciesModule() {
-  const policies = [
-    { id: 1, title: "Company Introduction", category: "General", updated: "2024-01-15", status: "Active" },
-    { id: 2, title: "Code of Conduct", category: "Ethics", updated: "2024-01-10", status: "Active" },
-    { id: 3, title: "Leave Policy", category: "Leave", updated: "2024-01-08", status: "Active" },
-    { id: 4, title: "Remote Work Policy", category: "Work", updated: "2024-01-05", status: "Active" },
-    { id: 5, title: "Health & Safety Guidelines", category: "Safety", updated: "2024-01-03", status: "Active" },
-    { id: 6, title: "Travel Policy", category: "Travel", updated: "2024-01-01", status: "Active" }
-  ];
-
+function HRPoliciesModule({ openModal }) {
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-xl p-6 shadow-lg">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">HR Policies & Documents</h2>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+          <button 
+            onClick={() => alert('Add New Policy feature coming soon!')}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          >
             📄 Add New Policy
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {policies.map((policy) => (
-            <div key={policy.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+          {mockPolicies.map((policy) => (
+            <div key={policy.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
                 <h3 className="font-semibold text-gray-900">{policy.title}</h3>
                 <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{policy.status}</span>
               </div>
               <p className="text-sm text-gray-600 mb-2">Category: {policy.category}</p>
-              <p className="text-xs text-gray-500">Updated: {policy.updated}</p>
-              <button className="mt-3 text-blue-600 hover:text-blue-500 text-sm font-medium">
+              <p className="text-xs text-gray-500 mb-3">Updated: {policy.updated}</p>
+              <button 
+                onClick={() => openModal('view-policy', policy)}
+                className="text-blue-600 hover:text-blue-500 text-sm font-medium"
+              >
                 View Document →
               </button>
             </div>
@@ -292,7 +559,7 @@ function HRPoliciesModule() {
 }
 
 // Leave Management Module Component
-function LeaveManagementModule({ user }) {
+function LeaveManagementModule({ user, openModal }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -330,13 +597,22 @@ function LeaveManagementModule({ user }) {
         <div className="bg-white rounded-xl p-6 shadow-lg">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Apply</h3>
           <div className="space-y-3">
-            <button className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+            <button 
+              onClick={() => openModal('apply-leave')}
+              className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+            >
               📝 Apply for Leave
             </button>
-            <button className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors">
+            <button 
+              onClick={() => openModal('view-calendar')}
+              className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors"
+            >
               📅 View Calendar
             </button>
-            <button className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors">
+            <button 
+              onClick={() => alert('Leave History: \n- Dec 20: Sick Leave (Approved)\n- Nov 15: Casual Leave (Approved)\n- Oct 10: Earned Leave (Approved)')}
+              className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors"
+            >
               📊 Leave History
             </button>
           </div>
@@ -368,7 +644,7 @@ function LeaveManagementModule({ user }) {
 }
 
 // Payroll Module Component
-function PayrollModule({ user }) {
+function PayrollModule({ user, downloadPayslip }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -411,7 +687,10 @@ function PayrollModule({ user }) {
             {['January 2024', 'December 2023', 'November 2023', 'October 2023'].map((month) => (
               <div key={month} className="flex justify-between items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                 <span className="font-medium">{month}</span>
-                <button className="text-blue-600 hover:text-blue-500 text-sm font-medium">
+                <button 
+                  onClick={() => downloadPayslip(month)}
+                  className="text-blue-600 hover:text-blue-500 text-sm font-medium"
+                >
                   📄 Download PDF
                 </button>
               </div>
@@ -424,7 +703,7 @@ function PayrollModule({ user }) {
 }
 
 // Profile Module Component
-function ProfileModule({ user }) {
+function ProfileModule({ user, openModal }) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
@@ -447,7 +726,10 @@ function ProfileModule({ user }) {
         </div>
       </div>
       <div className="mt-6">
-        <button className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+        <button 
+          onClick={() => openModal('edit-profile')}
+          className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+        >
           Edit Profile
         </button>
       </div>
@@ -456,32 +738,36 @@ function ProfileModule({ user }) {
 }
 
 // Reports Module Component
-function ReportsModule() {
+function ReportsModule({ openModal }) {
+  const reports = [
+    { name: "Leave Report", icon: "📊", description: "Monthly leave analytics" },
+    { name: "Payroll Report", icon: "💰", description: "Salary and deductions" },
+    { name: "Employee Report", icon: "👥", description: "Team performance" },
+    { name: "Attendance Report", icon: "⏰", description: "Daily attendance tracking" },
+    { name: "Policy Usage", icon: "📋", description: "Policy access statistics" },
+    { name: "Performance Report", icon: "📈", description: "Employee performance metrics" }
+  ];
+
   return (
     <div className="bg-white rounded-xl p-6 shadow-lg">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Reports & Analytics</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-          <div className="text-center">
-            <div className="text-3xl mb-2">📊</div>
-            <h3 className="font-semibold">Leave Report</h3>
-            <p className="text-sm text-gray-600 mt-2">Monthly leave analytics</p>
+        {reports.map((report, index) => (
+          <div 
+            key={index}
+            onClick={() => alert(`Generating ${report.name}...\nThis would normally generate and download the report.`)}
+            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+          >
+            <div className="text-center">
+              <div className="text-3xl mb-2">{report.icon}</div>
+              <h3 className="font-semibold">{report.name}</h3>
+              <p className="text-sm text-gray-600 mt-2">{report.description}</p>
+              <button className="mt-3 text-blue-600 hover:text-blue-500 text-sm font-medium">
+                Generate Report →
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-          <div className="text-center">
-            <div className="text-3xl mb-2">💰</div>
-            <h3 className="font-semibold">Payroll Report</h3>
-            <p className="text-sm text-gray-600 mt-2">Salary and deductions</p>
-          </div>
-        </div>
-        <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-          <div className="text-center">
-            <div className="text-3xl mb-2">👥</div>
-            <h3 className="font-semibold">Employee Report</h3>
-            <p className="text-sm text-gray-600 mt-2">Team performance</p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -534,12 +820,12 @@ function RecentActivity() {
   );
 }
 
-function QuickActions() {
+function QuickActions({ openModal }) {
   const actions = [
-    { name: "Apply Leave", icon: "📝" },
-    { name: "View Policies", icon: "📋" },
-    { name: "Download Payslip", icon: "💰" },
-    { name: "Update Profile", icon: "👤" }
+    { name: "Apply Leave", icon: "📝", action: () => openModal('apply-leave') },
+    { name: "View Policies", icon: "📋", action: () => openModal('view-policy', mockPolicies[0]) },
+    { name: "Download Payslip", icon: "💰", action: () => alert('Downloading latest payslip...') },
+    { name: "Update Profile", icon: "👤", action: () => openModal('edit-profile') }
   ];
 
   return (
@@ -549,6 +835,7 @@ function QuickActions() {
         {actions.map((action, index) => (
           <button
             key={index}
+            onClick={action.action}
             className="flex items-center space-x-2 p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <span className="text-lg">{action.icon}</span>
